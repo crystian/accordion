@@ -19,7 +19,7 @@
 	</section>
 	<section id="mainSection" class="hidden">
 
-		<dl is="expanding-list">
+		<dl is="accordion-toggle">
 			<dt>Section 1</dt>
 			<dd>
 				<p>Section 1 Content...</p>
@@ -31,17 +31,18 @@
 			<dt>Section 3</dt>
 			<dd>
 				<p>Section 3 Content...</p>
-				<p>Section 3 Content...</p>
 			</dd>
 		</dl>
+		
 		<br>
-		<button id="add">add</button>
+		<input type="text" id="accordion-new-title" />
+		<input type="text" id="accordion-new-description" />
+		<button id="accordion-add">add</button>
 		<br>
-		<input type="number" id="removeIndex" />
-		<button id="remove">remove</button>
+		<input type="number" id="accordion-remove-index" />
+		<button id="accordion-remove">remove</button>
 
 	</section>
-dinamico
 ajax
 a11y
 i18n

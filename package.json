@@ -1,7 +1,7 @@
 {
-	"name": "es6-webpack-seed",
-	"version": "0.0.2",
-	"description": "es6 webpack seed",
+	"name": "web-component-accordion-toggle",
+	"version": "0.0.3",
+	"description": "accordion toggle",
 	"scripts": {
 		"start": "webpack-dev-server --mode development --port 3000",
 		"build": "webpack --mode production",
@@ -51,18 +51,9 @@
 	"authors": [
 		"Crystian 'pusher' Bietti (https://www.linkedin.com/in/crystian)"
 	],
-	"keywords": [
-		"seed",
-		"es6",
-		"webpack",
-		"scss",
-		"sass",
-		"eslint"
-	],
-	"bugs": "https://github.com/crystian/es6-seed/issues",
-	"homepage": "https://github.com/crystian/es6-seed",
+	"homepage": "https://github.com/crystian/accordion",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/crystian/es6-seed"
+		"url": "https://github.com/crystian/accordion"
 	}
 }

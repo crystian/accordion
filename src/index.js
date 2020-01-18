@@ -1,34 +1,52 @@
 import 'normalize.css';
 import './index.scss';
-import { ExpandingList } from './accordion';
+import './accordion';
 
 // init
 window.addEventListener('DOMContentLoaded', () => {
-	document.getElementById('loadingSection')
-	.classList
-	.add('hidden');
-	document.getElementById('mainSection')
-	.classList
-	.remove('hidden');
+	document.querySelector('#loadingSection').classList.add('hidden');
+	document.querySelector('#mainSection').classList.remove('hidden');
 
+	// client sample
+	const accordionAdd = document.querySelector('#accordion-add');
+	const accordionNewTitle = document.querySelector('#accordion-new-title');
+	const accordionNewDescription = document.querySelector('#accordion-new-description');
+	const accordionRemove = document.querySelector('#accordion-remove');
+	const accordionRemoveIndex = document.querySelector('#accordion-remove-index');
 
-	let buttonAdd = document.getElementById('add');
-	let buttonRemove = document.getElementById('remove');
-	let textRemoveIndex = document.getElementById('removeIndex');
+	const dl = document.querySelector('dl');
 
-	let dl = document.getElementsByTagName('dl')[0];
+	const lorem = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ' +
+								'ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco ' +
+								'laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in ' +
+								'voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat ' +
+								'non proident, sunt in culpa qui officia deserunt mollit anim id est laborum';
 
-	buttonAdd.onclick = () => {
-		dl.agregar({a: 'section X', b: '<b>section x detail</b>'});
+	const getLorem = (limit) => {
+		const start = Math.floor(Math.random() * (lorem.length - limit)) + limit;
+		const end = start + limit;
+		return lorem.substring(start, end);
 	};
 
-	buttonRemove.onclick = () => {
-		dl.removerIndex(textRemoveIndex.value);
-		textRemoveIndex.value = '';
+	const fillNew = () => {
+		accordionNewTitle.value = getLorem(10);
+		accordionNewDescription.value = getLorem(40);
 	};
 
-	customElements.define('expanding-list', ExpandingList, {extends: 'dl'});
+	fillNew();
+
+	accordionAdd.onclick = () => {
+		dl.addChild({title: accordionNewTitle.value, description: `<i>${accordionNewDescription.value}</i>`});
+		fillNew();
+	};
+
+	accordionRemove.onclick = () => {
+		dl.removeChildByIndex(accordionRemoveIndex.value);
+		accordionRemoveIndex.value = '';
+	};
 
 });
+
+
 
 

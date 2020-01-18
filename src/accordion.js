@@ -1,114 +1,107 @@
-export class ExpandingList extends HTMLDListElement {
-	rootDl;
+export const accordionToggleErrorMessages = {
+	invalidFixedTree: 'Invalid tree of elements, should be a pair of DT and DD',
+	invalidTags: 'Invalid children tags, should be DT or DD',
+	invalidPair: 'Invalid pair of tags, should be a DT and a DD',
+	invalidIndexToRemove: 'Index invalid to remove',
+	invalidIndexToRemoveGreater: 'Index greater than the length of elements'
+};
 
+export class AccordionToggle extends HTMLDListElement {
 	constructor() {
 		super();
-
-		this.rootDl = document.querySelector(':root dl');
-		this.validateContent();
-		this.hideDD();
-		this.rootDl.querySelectorAll('dt')
-		.forEach(item => {
-			this.bindElement(item);
-		});
+		this.init();
 	}
 
-	removeItem($event) {
+	init() {
+		this._validateChildren();
+		this._hideChildren();
+		this._bindChildren();
+	}
+
+	addChild(data) {
+		const dt = document.createElement('dt');
+		const dd = document.createElement('dd');
+		dt.innerHTML = data.title;
+		dd.innerHTML = data.description;
+		dd.style.display = 'none';
+		this._bindChild(dt);
+		this._bindChild(dd);
+		this.appendChild(dt);
+		this.appendChild(dd);
+	}
+
+	removeChildByIndex(index) {
+		if (index === '') {
+			throw Error(accordionToggleErrorMessages.invalidIndexToRemove);
+		}
+
+		index = +index;
+		if (!Number.isInteger(index)) {
+			throw Error(accordionToggleErrorMessages.invalidIndexToRemove);
+		}
+
+		const elements = this.getElementsByTagName('DT');
+		if (index >= elements.length) {
+			throw Error(accordionToggleErrorMessages.invalidIndexToRemoveGreater);
+		}
+
+		this._removeChild({target: elements[index]});
+	}
+
+	_removeChild($event) {
 		$event.target.nextElementSibling.remove();
 		$event.target.remove();
 	}
 
-	validateContent() {
+	_validateChildren() {
+		const children = this.children;
 		let flagDTDD = true;
-		let children = this.rootDl.children;
 
 		if (children.length % 2) {
-			throw Error('invalid tree 1');
+			throw Error(accordionToggleErrorMessages.invalidFixedTree);
 		}
 
 		Array.from(children)
 		.forEach(item => {
 			if (!['DT', 'DD'].includes(item.tagName)) {
-				throw Error('invalid tag name');
+				throw Error(accordionToggleErrorMessages.invalidTags);
 			}
 
 			let dtDetected = item.tagName.includes('DT') && flagDTDD;
 			let ddDetected = item.tagName.includes('DD') && !flagDTDD;
 
 			if (dtDetected === ddDetected) {
-				throw Error('invalid pair');
+				throw Error(accordionToggleErrorMessages.invalidPair);
 			}
 
 			flagDTDD = !flagDTDD;
 		});
 	}
 
-	updateSelected($event) {
+	_childrenSelected($event) {
 		const stateprev = $event.target.nextElementSibling.style.display;
-		this.hideDD();
+		this._hideChildren();
 		$event.target.nextElementSibling.style.display = stateprev === 'block' ? 'none' : 'block';
 	}
 
-	hideDD() {
-		this.rootDl.querySelectorAll('dd')
+	_hideChildren() {
+		this.querySelectorAll('dd')
 		.forEach(item => {
 			item.style.display = 'none';
 		});
 	}
 
-	bindElement(item) {
+	_bindChildren() {
+		this.querySelectorAll('dt').forEach(item => {
+			this._bindChild(item);
+		});
+	}
+
+	_bindChild(item) {
 		item.style.cursor = 'pointer';
-		item.onclick = this.updateSelected.bind(this);
-
-	}
-
-
-	//   connectedCallback() {
-	//     console.log('Custom square element added to page.');
-	//     //updateStyle(this);
-	//   }
-
-	//   disconnectedCallback() {
-	//     console.log('Custom square element removed from page.');
-	//   }
-
-	//   adoptedCallback() {
-	//     console.log('Custom square element moved to new page.');
-	//   }
-
-	//   attributeChangedCallback(name, oldValue, newValue) {
-	//     console.log('Custom square element attributes changed.');
-	//     //updateStyle(this);
-
-	//   }
-
-	agregar(data) {
-		const a = document.createElement('dt');
-		a.innerHTML = data.a;
-		const b = document.createElement('dd');
-		b.innerHTML = data.b;
-		b.style.display = 'none';
-		this.bindElement(a);
-		this.bindElement(b);
-		this.appendChild(a);
-		this.appendChild(b);
-	}
-
-	removerIndex(index) {
-		if (!index) {
-			throw Error('index invalid');
-		}
-
-		index = +index;
-		if (!Number.isInteger(index)) {
-			throw Error('index invalid');
-		}
-
-		const elements = this.rootDl.getElementsByTagName('DT');
-		if (index >= elements.length) {
-			throw Error('index grater than length');
-		}
-
-		this.removeItem({target: elements[index]});
+		item.onclick = this._childrenSelected.bind(this);
 	}
 }
+
+// registering the new component
+customElements.define('accordion-toggle', AccordionToggle, {extends: 'dl'});
