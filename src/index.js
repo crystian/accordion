@@ -4,8 +4,8 @@ import './accordion';
 
 // init
 window.addEventListener('DOMContentLoaded', () => {
-	document.querySelector('#loadingSection').classList.add('hidden');
-	document.querySelector('#mainSection').classList.remove('hidden');
+	document.querySelector('#loadingSection').classList.add('u-hidden');
+	document.querySelector('#mainSection').classList.remove('u-hidden');
 
 	// client sample
 	const accordionAdd = document.querySelector('#accordion-add');
@@ -47,12 +47,19 @@ window.addEventListener('DOMContentLoaded', () => {
 	};
 
 	accordionXhr.onclick = async () => {
-		document.querySelector('#loadingSection').classList.add('hidden');
+		document.querySelector('#loadingSection').classList.remove('u-hidden');
 
-		const data = await fetch('./data.json');
-		const json = await data.json();
+		try {
+			const data = await fetch('./data.json');
+			const json = await data.json();
 
-		json.forEach(dl.addChild.bind(dl));
+			json.forEach(dl.addChild.bind(dl));
+		} catch (e) {
+			console.error(e);
+		} finally {
+			document.querySelector('#loadingSection').classList.add('u-hidden');
+		}
+
 	};
 });
 

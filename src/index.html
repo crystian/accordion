@@ -8,16 +8,17 @@
 	<title>Sample</title>
 	<style>
 		/* intentional here to avoid flicking by loading css after DOMContentLoaded */
-		.hidden {
+		.u-hidden {
 			display: none;
 		}
 	</style>
 </head>
 <body>
-	<section id="loadingSection">
-		<img src="assets/img/loader.gif" alt="" id="loadingImg">
-	</section>
-	<section id="mainSection" class="hidden">
+<section class="app-loadingSection" id="loadingSection">
+	<img src="assets/img/loader.gif" alt="cargando..." id="loadingImg">
+</section>
+<section class="app-mainSection u-hidden" id="mainSection">
+	<div class="u-wrapper">
 
 		<dl is="accordion-toggle">
 			<dt>Section 1</dt>
@@ -33,19 +34,44 @@
 				<p>Section 3 Content...</p>
 			</dd>
 		</dl>
-		
-		<br>
-		<input type="text" id="accordion-new-title" />
-		<input type="text" id="accordion-new-description" />
-		<button id="accordion-add">add</button>
-		<br>
-		<input type="number" id="accordion-remove-index" />
-		<button id="accordion-remove">remove</button>
 
-		<button id="accordion-xhr">get by xhr</button>
+	</div>
+	<div class="app-playground">
+		<div class="u-bold">Config:</div>
+		<div>
+			<label for="accordion-new-title">Title: </label>
+			<input type="text" id="accordion-new-title"/>
+		</div>
+		<div>
+			<label for="accordion-new-description">Description: </label>
+			<input type="text" id="accordion-new-description"/>
+		</div>
+		<div>
+			<button id="accordion-add">add new item</button>
+		</div>
 
-	</section>
-ajax
+		<hr>
+
+		<div>
+			<label for="accordion-remove-index">Remove item by index</label>
+			<input type="number" id="accordion-remove-index" size="3"/>
+		</div>
+		<div>
+			<button id="accordion-remove">remove</button>
+		</div>
+
+		<hr>
+
+		<div>
+			<label for="accordion-xhr">Get data by XHR</label>
+			<button id="accordion-xhr">get</button>
+		</div>
+	</div>
+
+	<div>By <a href="https://www.linkedin.com/in/crystian/" target="_blank">Pusher</a> with love</div>
+
+</section>
 a11y
+doc
 </body>
 </html>

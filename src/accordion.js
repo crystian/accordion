@@ -1,3 +1,5 @@
+import './accordion.scss';
+
 export const accordionToggleErrorMessages = {
 	invalidFixedTree: 'Invalid tree of elements, should be a pair of DT and DD',
 	invalidTags: 'Invalid children tags, should be DT or DD',
@@ -27,7 +29,7 @@ export class AccordionToggle extends HTMLDListElement {
 		const dd = document.createElement('dd');
 		dt.innerHTML = data.title;
 		dd.innerHTML = data.description;
-		dd.style.display = 'none';
+		dd.classList.add('accordion-hidden');
 		this._bindChild(dt);
 		this._bindChild(dd);
 		this._appendChild(dt);
@@ -95,15 +97,19 @@ export class AccordionToggle extends HTMLDListElement {
 	}
 
 	_childrenSelected($event) {
-		const stateprev = $event.target.nextElementSibling.style.display;
+		const statePrev = $event.target.nextElementSibling.classList.contains('accordion-hidden');
 		this._hideChildren();
-		$event.target.nextElementSibling.style.display = stateprev === 'block' ? 'none' : 'block';
+		if (statePrev) {
+			$event.target.nextElementSibling.classList.remove('accordion-hidden');
+		} else {
+			$event.target.nextElementSibling.classList.add('accordion-hidden');
+		}
 	}
 
 	_hideChildren() {
 		this.querySelectorAll('dd')
 		.forEach(item => {
-			item.style.display = 'none';
+			item.classList.add('accordion-hidden');
 		});
 	}
 
@@ -114,7 +120,6 @@ export class AccordionToggle extends HTMLDListElement {
 	}
 
 	_bindChild(item) {
-		item.style.cursor = 'pointer';
 		item.onclick = this._childrenSelected.bind(this);
 	}
 }

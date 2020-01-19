@@ -97,7 +97,7 @@ describe('should manipulate the fixed html', () => {
 	});
 
 	it('should hide children', function() {
-		const displayNone = Array.from(dlRoot.querySelectorAll('dd')).every(el => el.style.display === 'none');
+		const displayNone = Array.from(dlRoot.querySelectorAll('dd')).every(el => el.classList.contains('accordion-hidden'));
 
 		expect(displayNone).toBeTrue();
 	});
@@ -114,39 +114,39 @@ describe('should manipulate the fixed html', () => {
 	it('should show the first DD', function() {
 		dlRoot.querySelector('dt').click();
 
-		expect(dlRoot.querySelectorAll('dd')[0].style.display === 'block').toBeTrue();
-		expect(dlRoot.querySelectorAll('dd')[1].style.display === 'none').toBeTrue();
+		expect(dlRoot.querySelectorAll('dd')[0].classList.contains('accordion-hidden')).toBeFalse();
+		expect(dlRoot.querySelectorAll('dd')[1].classList.contains('accordion-hidden')).toBeTrue();
 	});
 
 	it('should hide the first DD', function() {
 		dlRoot.querySelector('dt').click();
 
-		expect(dlRoot.querySelectorAll('dd')[0].style.display === 'block').toBeTrue();
-		expect(dlRoot.querySelectorAll('dd')[1].style.display === 'none').toBeTrue();
+		expect(dlRoot.querySelectorAll('dd')[0].classList.contains('accordion-hidden')).toBeFalse();
+		expect(dlRoot.querySelectorAll('dd')[1].classList.contains('accordion-hidden')).toBeTrue();
 
 		dlRoot.querySelector('dt').click();
 
-		expect(dlRoot.querySelectorAll('dd')[0].style.display === 'none').toBeTrue();
-		expect(dlRoot.querySelectorAll('dd')[1].style.display === 'none').toBeTrue();
+		expect(dlRoot.querySelectorAll('dd')[0].classList.contains('accordion-hidden')).toBeTrue();
+		expect(dlRoot.querySelectorAll('dd')[1].classList.contains('accordion-hidden')).toBeTrue();
 	});
 
 	it('should show the second DD', function() {
 		dlRoot.querySelectorAll('dt')[1].click();
 
-		expect(dlRoot.querySelectorAll('dd')[0].style.display === 'none').toBeTrue();
-		expect(dlRoot.querySelectorAll('dd')[1].style.display === 'block').toBeTrue();
+		expect(dlRoot.querySelectorAll('dd')[0].classList.contains('accordion-hidden')).toBeTrue();
+		expect(dlRoot.querySelectorAll('dd')[1].classList.contains('accordion-hidden')).toBeFalse();
 	});
 
 	it('should hide the second DD', function() {
 		dlRoot.querySelectorAll('dt')[1].click();
 
-		expect(dlRoot.querySelectorAll('dd')[0].style.display === 'none').toBeTrue();
-		expect(dlRoot.querySelectorAll('dd')[1].style.display === 'block').toBeTrue();
+		expect(dlRoot.querySelectorAll('dd')[0].classList.contains('accordion-hidden')).toBeTrue();
+		expect(dlRoot.querySelectorAll('dd')[1].classList.contains('accordion-hidden')).toBeFalse();
 
 		dlRoot.querySelectorAll('dt')[1].click();
 
-		expect(dlRoot.querySelectorAll('dd')[0].style.display === 'none').toBeTrue();
-		expect(dlRoot.querySelectorAll('dd')[1].style.display === 'none').toBeTrue();
+		expect(dlRoot.querySelectorAll('dd')[0].classList.contains('accordion-hidden')).toBeTrue();
+		expect(dlRoot.querySelectorAll('dd')[1].classList.contains('accordion-hidden')).toBeTrue();
 	});
 });
 
