@@ -2,12 +2,6 @@ body {
 	font-family: Verdana, serif;
 }
 
-.app-loadingSection img {
-	position: absolute;
-	top: 10px;
-	right: 10px;
-}
-
 .u-wrapper {
 	border: 1px gray solid;
 	margin: 10px;
@@ -17,11 +11,17 @@ body {
 	font-weight: bold;
 }
 
+.app-loadingSection img {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+}
+
 .app-playground {
 	padding: 5px;
 }
 
-// custom the element:
+// customize the element:
 dl[is="accordion-toggle"] {
 	background: aliceblue;
 
