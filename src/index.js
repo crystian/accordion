@@ -13,6 +13,7 @@ window.addEventListener('DOMContentLoaded', () => {
 	const accordionNewDescription = document.querySelector('#accordion-new-description');
 	const accordionRemove = document.querySelector('#accordion-remove');
 	const accordionRemoveIndex = document.querySelector('#accordion-remove-index');
+	const accordionXhr = document.querySelector('#accordion-xhr');
 
 	const dl = document.querySelector('dl');
 
@@ -22,7 +23,7 @@ window.addEventListener('DOMContentLoaded', () => {
 								'voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat ' +
 								'non proident, sunt in culpa qui officia deserunt mollit anim id est laborum';
 
-	const getLorem = (limit) => {
+	const getLorem = limit => {
 		const start = Math.floor(Math.random() * (lorem.length - limit)) + limit;
 		const end = start + limit;
 		return lorem.substring(start, end);
@@ -45,6 +46,14 @@ window.addEventListener('DOMContentLoaded', () => {
 		accordionRemoveIndex.value = '';
 	};
 
+	accordionXhr.onclick = async () => {
+		document.querySelector('#loadingSection').classList.add('hidden');
+
+		const data = await fetch('./data.json');
+		const json = await data.json();
+
+		json.forEach(dl.addChild.bind(dl));
+	};
 });
 
 
