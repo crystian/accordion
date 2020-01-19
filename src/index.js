@@ -14,6 +14,7 @@ window.addEventListener('DOMContentLoaded', () => {
 	const accordionRemove = document.querySelector('#accordion-remove');
 	const accordionRemoveIndex = document.querySelector('#accordion-remove-index');
 	const accordionXhr = document.querySelector('#accordion-xhr');
+	const accordionAutoCollapse = document.querySelector('#accordion-auto-collapse');
 
 	const dl = document.querySelector('dl');
 
@@ -30,8 +31,8 @@ window.addEventListener('DOMContentLoaded', () => {
 	};
 
 	const fillNew = () => {
-		accordionNewTitle.value = getLorem(10);
-		accordionNewDescription.value = getLorem(40);
+		accordionNewTitle.value = getLorem(12);
+		accordionNewDescription.value = getLorem(60);
 	};
 
 	fillNew();
@@ -59,7 +60,10 @@ window.addEventListener('DOMContentLoaded', () => {
 		} finally {
 			document.querySelector('#loadingSection').classList.add('u-hidden');
 		}
+	};
 
+	accordionAutoCollapse.onchange = ($event) => {
+		dl.setAttribute('auto-collapse', $event.target.checked);
 	};
 });
 

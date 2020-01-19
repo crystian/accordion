@@ -149,6 +149,25 @@ describe('should manipulate the fixed html', () => {
 		expect(dlRoot.querySelectorAll('dd')[0].classList.contains('accordion-show')).toBeFalse();
 		expect(dlRoot.querySelectorAll('dd')[1].classList.contains('accordion-show')).toBeFalse();
 	});
+
+	it('should hide the second DD by keyboard', function() {
+		// dlRoot.querySelectorAll('dt')[1].onkeydown({keyCode: 13})
+		dlRoot.querySelectorAll('dt')[1].dispatchEvent(new KeyboardEvent('keydown',{ 'keyCode': 13}));
+		
+		expect(dlRoot.querySelectorAll('dd')[0].classList.contains('accordion-show')).toBeFalse();
+		expect(dlRoot.querySelectorAll('dd')[1].classList.contains('accordion-show')).toBeTrue();
+
+		dlRoot.querySelectorAll('dt')[1].dispatchEvent(new KeyboardEvent('keydown',{ 'keyCode': 13}));
+
+		expect(dlRoot.querySelectorAll('dd')[0].classList.contains('accordion-show')).toBeFalse();
+		expect(dlRoot.querySelectorAll('dd')[1].classList.contains('accordion-show')).toBeFalse();
+
+		// nothing happend
+		dlRoot.querySelectorAll('dt')[1].dispatchEvent(new KeyboardEvent('keydown',{ 'keyCode': 32}));
+
+		expect(dlRoot.querySelectorAll('dd')[0].classList.contains('accordion-show')).toBeFalse();
+		expect(dlRoot.querySelectorAll('dd')[1].classList.contains('accordion-show')).toBeFalse();
+	});
 });
 
 

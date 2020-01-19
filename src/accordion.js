@@ -14,6 +14,7 @@ export class AccordionToggle extends HTMLDListElement {
 	_appendChild;
 	_autoCollapse;
 
+	// register the attributes to use on attributeChangedCallback
 	static get observedAttributes() {
 		return ['auto-collapse'];
 	}
@@ -35,6 +36,8 @@ export class AccordionToggle extends HTMLDListElement {
 		const dt = document.createElement('dt');
 		const dd = document.createElement('dd');
 		dt.innerHTML = data.title;
+		dt.setAttribute('tabindex', '0');
+		dt.setAttribute('data-message', data.title);
 		dd.innerHTML = data.description;
 		dd.classList.add('accordion-hidden');
 		this._bindChild(dt);
@@ -95,7 +98,7 @@ export class AccordionToggle extends HTMLDListElement {
 
 	_validateChildren() {
 		const children = this.children;
-		let flagDTDD = true;
+		let flagFirstElementOfPair = true; // true if it is DT
 
 		if (children.length % 2) {
 			throw Error(accordionToggleErrorMessages.invalidFixedTree);
@@ -108,14 +111,19 @@ export class AccordionToggle extends HTMLDListElement {
 			}
 
 			// detect a DT as first and DD as second
-			let dtDetected = item.tagName.includes('DT') && flagDTDD;
-			let ddDetected = item.tagName.includes('DD') && !flagDTDD;
+			let dtDetected = item.tagName.includes('DT') && flagFirstElementOfPair;
+			let ddDetected = item.tagName.includes('DD') && !flagFirstElementOfPair;
 
 			if (dtDetected === ddDetected) {
 				throw Error(accordionToggleErrorMessages.invalidPair);
 			}
 
-			flagDTDD = !flagDTDD;
+			item.setAttribute('tabindex', '0');
+			if(flagFirstElementOfPair){
+				item.setAttribute('data-message', item.innerHTML);
+			}
+
+			flagFirstElementOfPair = !flagFirstElementOfPair;
 		});
 	}
 
@@ -151,6 +159,11 @@ export class AccordionToggle extends HTMLDListElement {
 
 	_bindChild(item) {
 		item.onclick = this._childrenSelected.bind(this);
+		item.onkeydown = ($event) => {
+			if($event.keyCode === 13) { // The Enter/Return key
+				this._childrenSelected($event);
+			}
+		};
 	}
 }
 
