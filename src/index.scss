@@ -20,3 +20,17 @@ body {
 .app-playground {
 	padding: 5px;
 }
+
+// custom the element:
+dl[is="accordion-toggle"] {
+	background: aliceblue;
+
+	dt {
+		margin: 6px;
+		padding: 2px;
+		background: #E2F1FF;
+	}
+	dd {
+		background: #FFFFFF;
+	}
+}

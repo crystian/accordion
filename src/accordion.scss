@@ -1,24 +1,24 @@
+// normalize the component style
 dl[is="accordion-toggle"] {
-	background: aliceblue;
 	display: flex;
 	flex-direction: column;
 	margin: 0;
 
 	dt {
 		flex: 1 1 auto;
-		margin: 6px;
-		padding: 2px;
-		background: #E2F1FF;
 		cursor: pointer;
 	}
+
 	dd {
 		flex: 1 1 auto;
-		.u-hidden {
-			transition: visibility 0s linear 0.7s, opacity 0.7s ease-in-out;
+		margin: 0;
+		
+		&.accordion-show {
+			display: block;
+		}
+
+		&.accordion-hidden {
+			display: none;
 		}
 	}
-}
-
-.accordion-hidden {
-	display: none;
 }

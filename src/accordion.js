@@ -7,10 +7,16 @@ export const accordionToggleErrorMessages = {
 	invalidIndexToRemove: 'Index invalid to remove',
 	invalidIndexToRemoveGreater: 'Index greater than the length of elements',
 	methodNotAllowed: 'Method not allowed',
+	invalidAutoCollapseArgument: 'Invalid argument to auto-collapse'
 };
 
 export class AccordionToggle extends HTMLDListElement {
 	_appendChild;
+	_autoCollapse;
+
+	static get observedAttributes() {
+		return ['auto-collapse'];
+	}
 
 	constructor() {
 		super();
@@ -18,6 +24,7 @@ export class AccordionToggle extends HTMLDListElement {
 	}
 
 	init() {
+		this._autoColapse = true;
 		this._validateChildren();
 		this._hideChildren();
 		this._bindChildren();
@@ -54,7 +61,23 @@ export class AccordionToggle extends HTMLDListElement {
 		this._removeChild({target: elements[index]});
 	}
 
-	_blockMethods(){
+	attributeChangedCallback(name /*, oldValue, newValue*/) {
+		switch (name) {
+			case 'auto-collapse':
+				this._hideChildren();
+				this._setAutoCollapse();
+				break;
+		}
+	}
+
+	_setAutoCollapse() {
+		// default
+		this._autoColapse = true;
+		// TODO handle the potential error by parse
+		this._autoColapse = Boolean(JSON.parse(this.getAttribute('auto-collapse')));
+	}
+
+	_blockMethods() {
 		this._appendChild = this.appendChild;
 		this.appendChild = this._methodNotAllowed;
 		this.removeChild = this._methodNotAllowed;
@@ -98,11 +121,17 @@ export class AccordionToggle extends HTMLDListElement {
 
 	_childrenSelected($event) {
 		const statePrev = $event.target.nextElementSibling.classList.contains('accordion-hidden');
-		this._hideChildren();
+
+		if (this._autoColapse) {
+			this._hideChildren();
+		}
+
 		if (statePrev) {
 			$event.target.nextElementSibling.classList.remove('accordion-hidden');
+			$event.target.nextElementSibling.classList.add('accordion-show');
 		} else {
 			$event.target.nextElementSibling.classList.add('accordion-hidden');
+			$event.target.nextElementSibling.classList.remove('accordion-show');
 		}
 	}
 
@@ -110,6 +139,7 @@ export class AccordionToggle extends HTMLDListElement {
 		this.querySelectorAll('dd')
 		.forEach(item => {
 			item.classList.add('accordion-hidden');
+			item.classList.remove('accordion-show');
 		});
 	}
 
