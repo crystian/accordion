@@ -3,10 +3,13 @@ export const accordionToggleErrorMessages = {
 	invalidTags: 'Invalid children tags, should be DT or DD',
 	invalidPair: 'Invalid pair of tags, should be a DT and a DD',
 	invalidIndexToRemove: 'Index invalid to remove',
-	invalidIndexToRemoveGreater: 'Index greater than the length of elements'
+	invalidIndexToRemoveGreater: 'Index greater than the length of elements',
+	methodNotAllowed: 'Method not allowed',
 };
 
 export class AccordionToggle extends HTMLDListElement {
+	_appendChild;
+
 	constructor() {
 		super();
 		this.init();
@@ -16,6 +19,7 @@ export class AccordionToggle extends HTMLDListElement {
 		this._validateChildren();
 		this._hideChildren();
 		this._bindChildren();
+		this._blockMethods();
 	}
 
 	addChild(data) {
@@ -26,8 +30,8 @@ export class AccordionToggle extends HTMLDListElement {
 		dd.style.display = 'none';
 		this._bindChild(dt);
 		this._bindChild(dd);
-		this.appendChild(dt);
-		this.appendChild(dd);
+		this._appendChild(dt);
+		this._appendChild(dd);
 	}
 
 	removeChildByIndex(index) {
@@ -35,7 +39,7 @@ export class AccordionToggle extends HTMLDListElement {
 			throw Error(accordionToggleErrorMessages.invalidIndexToRemove);
 		}
 
-		index = +index;
+		index = +index; // convert to number
 		if (!Number.isInteger(index)) {
 			throw Error(accordionToggleErrorMessages.invalidIndexToRemove);
 		}
@@ -46,6 +50,17 @@ export class AccordionToggle extends HTMLDListElement {
 		}
 
 		this._removeChild({target: elements[index]});
+	}
+
+	_blockMethods(){
+		this._appendChild = this.appendChild;
+		this.appendChild = this._methodNotAllowed;
+		this.removeChild = this._methodNotAllowed;
+		this.replaceChild = this._methodNotAllowed;
+	}
+
+	_methodNotAllowed() {
+		throw Error(accordionToggleErrorMessages.methodNotAllowed);
 	}
 
 	_removeChild($event) {
@@ -67,6 +82,7 @@ export class AccordionToggle extends HTMLDListElement {
 				throw Error(accordionToggleErrorMessages.invalidTags);
 			}
 
+			// detect a DT as first and DD as second
 			let dtDetected = item.tagName.includes('DT') && flagDTDD;
 			let ddDetected = item.tagName.includes('DD') && !flagDTDD;
 

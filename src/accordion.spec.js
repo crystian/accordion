@@ -1,8 +1,7 @@
 import { accordionToggleErrorMessages } from './accordion';
 
 const createPair = (dlRoot) => {
-	dlRoot.appendChild(document.createElement('dt'));
-	dlRoot.appendChild(document.createElement('dd'));
+	dlRoot.innerHTML += '<dt></dt><dd></dd>';
 };
 
 
@@ -41,6 +40,12 @@ describe('should manipulate the dynamic html', () => {
 		expect(dlRoot.children[1].innerHTML).toContain('desc1');
 	});
 
+	it('should fail by using appendChild method', function() {
+		expect(() => {
+			dlRoot.appendChild(document.createElement('dt'));
+		}).toThrowError(accordionToggleErrorMessages.methodNotAllowed);
+	});
+
 	it('should fail by remove a pair of elements without index', function() {
 		expect(() => {
 			dlRoot.removeChildByIndex();
@@ -72,7 +77,12 @@ describe('should manipulate the dynamic html', () => {
 		expect(dlRoot.children.length).toBe(2);
 		expect(dlRoot.children[0].innerHTML).toBe('title2');
 		expect(dlRoot.children[1].innerHTML).toBe('desc2');
+	});
 
+	it('should fail by using removeChild method', function() {
+		expect(() => {
+			dlRoot.removeChild();
+		}).toThrowError(accordionToggleErrorMessages.methodNotAllowed);
 	});
 });
 
@@ -155,7 +165,7 @@ describe('should validate the fixed html', () => {
 
 	it('should fail by odd elements', function() {
 		expect(() => {
-			dlRoot.appendChild(document.createElement('div'));
+			dlRoot.innerHTML = '<div></div>';
 
 			dlRoot.init();
 
@@ -164,8 +174,7 @@ describe('should validate the fixed html', () => {
 
 	it('should fail by invalid tag elements', function() {
 		expect(() => {
-			dlRoot.appendChild(document.createElement('div'));
-			dlRoot.appendChild(document.createElement('div'));
+			dlRoot.innerHTML = '<div></div><div></div>';
 
 			dlRoot.init();
 
@@ -174,8 +183,7 @@ describe('should validate the fixed html', () => {
 
 	it('should fail by invalid tag elements 2', function() {
 		expect(() => {
-			dlRoot.appendChild(document.createElement('dt'));
-			dlRoot.appendChild(document.createElement('div'));
+			dlRoot.innerHTML = '<dt></dt><div></div>';
 
 			dlRoot.init();
 
@@ -184,8 +192,7 @@ describe('should validate the fixed html', () => {
 
 	it('should fail by invalid tag elements 3', function() {
 		expect(() => {
-			dlRoot.appendChild(document.createElement('div'));
-			dlRoot.appendChild(document.createElement('dt'));
+			dlRoot.innerHTML = '<div></div><dt></dt>';
 
 			dlRoot.init();
 
@@ -194,9 +201,7 @@ describe('should validate the fixed html', () => {
 
 	it('should fail by invalid pair of tags in order', function() {
 		expect(() => {
-			dlRoot.appendChild(document.createElement('dd'));
-			dlRoot.appendChild(document.createElement('dt'));
-
+			dlRoot.innerHTML = '<dd></dd><dt></dt>';
 			dlRoot.init();
 
 		}).toThrowError(accordionToggleErrorMessages.invalidPair);
